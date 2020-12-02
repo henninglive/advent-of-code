@@ -1,4 +1,5 @@
 mod day1;
+mod day2;
 
 pub trait Problem {
     fn part1(&self) -> i64;
@@ -22,7 +23,8 @@ macro_rules! solutions {
 }
 
 solutions!(
-    day1
+    day1,
+    day2
 );
 
 fn main() {
