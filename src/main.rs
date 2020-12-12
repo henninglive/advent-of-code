@@ -3,6 +3,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day12;
 
 pub trait Problem {
     fn part1(&self) -> i64;
@@ -30,7 +31,8 @@ solutions!(
     day2,
     day3,
     day4,
-    day5
+    day5,
+    day12
 );
 
 fn main() {
