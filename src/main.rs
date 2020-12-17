@@ -40,12 +40,12 @@ fn main() {
     match std::env::args().nth(1) {
         Some(ref s) if s == "--help" || s == "-h" => {
             print!("\
-Advent of Code is a [website](https://adventofcode.com) with a advent calendar\n\
-with small programming puzzles for a variety of skill sets and skill levels\n\
-that can be solved in any programming language.\n\
+Advent of Code is a [website](https://adventofcode.com) with Advent Calendar\n\
+of small programming puzzles for a variety of skill sets and skill levels that\n\
+can be solved in any programming language.\n\
 \n\
-This program contains solutions to puzzles, solved using the\n\
-[Rust programing language](https://www.rust-lang.org/en-US/).\n\
+This program contains solutions to the Advent of Code 2020 puzzles, solved using\n\
+the [Rust programing language](https://www.rust-lang.org/en-US/).\n\
 \n\
 Usage: advent-of-code [day]\n")
         }

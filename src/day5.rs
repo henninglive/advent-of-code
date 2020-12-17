@@ -39,7 +39,7 @@ impl Seat {
     }
 
     fn id(&self) -> i64 {
-        self.row as i64 * 8 + self.column  as i64
+        self.row as i64 * 8 + self.column as i64
     }
 }
 
@@ -86,7 +86,6 @@ impl Problem for Solution {
 }
 
 #[test]
-#[cfg(test)]
 fn test_seat_parsing() {
     let test_seat = |str: &str, row: u16, column: u16, id: i64| {
         let seat = Seat::parse(str);
@@ -102,14 +101,12 @@ fn test_seat_parsing() {
 }
 
 #[test]
-#[cfg(test)]
 fn test_part1() {
     let solution = Solution::init();
     assert_eq!(solution.part1(), 963)
 }
 
 #[test]
-#[cfg(test)]
 fn test_part2() {
     let solution = Solution::init();
     assert_eq!(solution.part2(), 592)

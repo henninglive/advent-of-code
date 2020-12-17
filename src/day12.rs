@@ -105,16 +105,13 @@ impl super::Problem for Solution {
 }
 
 #[test]
-#[cfg(test)]
 fn test_part1() {
     let solution = Solution::init();
     assert_eq!(solution.part1(), 508)
 }
 
 #[test]
-#[cfg(test)]
 fn test_part2() {
     let solution = Solution::init();
     assert_eq!(solution.part2(), 0)
 }
-

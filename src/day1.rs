@@ -13,7 +13,7 @@ impl Solution {
     }
 }
 
-impl super::Problem for Solution {
+impl Problem for Solution {
     fn part1(&self) -> i64 {
         iproduct!(self.0.iter(), self.0.iter())
             .find(|(&i, &j)| i + j == 2020)
@@ -30,14 +30,12 @@ impl super::Problem for Solution {
 }
 
 #[test]
-#[cfg(test)]
 fn test_part1() {
     let solution = Solution::init();
     assert_eq!(solution.part1(), 960075)
 }
 
 #[test]
-#[cfg(test)]
 fn test_part2() {
     let solution = Solution::init();
     assert_eq!(solution.part2(), 212900130)

@@ -34,7 +34,7 @@ impl Solution {
     }
 }
 
-impl super::Problem for Solution {
+impl Problem for Solution {
     fn part1(&self) -> i64 {
         self.0
             .iter()
@@ -59,17 +59,13 @@ impl super::Problem for Solution {
 }
 
 #[test]
-#[cfg(test)]
 fn test_part1() {
     let solution = Solution::init();
     assert_eq!(solution.part1(), 603)
 }
 
 #[test]
-#[cfg(test)]
 fn test_part2() {
     let solution = Solution::init();
     assert_eq!(solution.part2(), 404)
 }
-
-

@@ -150,7 +150,7 @@ fn validate(key: PassportKey, value: &'static str) -> Result<(), Box<dyn std::er
             } else {
                 Err(format!("Invalid Passport ID {:?}", value).into())
             }
-        },
+        }
         _ => Err(format!("unknown key {:?}", key).into())
     }
 }
@@ -183,14 +183,12 @@ impl Problem for Solution {
 }
 
 #[test]
-#[cfg(test)]
 fn test_part1() {
     let solution = Solution::init();
     assert_eq!(solution.part1(), 233)
 }
 
 #[test]
-#[cfg(test)]
 fn test_part2() {
     let solution = Solution::init();
     assert_eq!(solution.part2(), 111)
