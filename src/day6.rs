@@ -112,7 +112,7 @@ impl Solution {
         let mut list = Vec::new();
         let mut group: (u32, u32) = (0, u32::max_value());
         for line in include_str!("day6.txt").lines() {
-            if line.is_empty() && group != (0, u32::max_value()) {
+            if line.is_empty() {
                 list.push(group);
                 group = (0, u32::max_value());
                 continue;
@@ -129,10 +129,7 @@ impl Solution {
             group.1 &= person;
         }
 
-        if group != (0, u32::max_value()) {
-            list.push(group);
-        }
-
+        list.push(group);
         Box::new(Solution(list))
     }
 }

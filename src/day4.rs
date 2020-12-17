@@ -204,7 +204,7 @@ impl Solution {
         let mut passport = HashMap::new();
 
         for line in include_str!("day4.txt").lines() {
-            if line.is_empty() && !passport.is_empty() {
+            if line.is_empty() {
                 list.push(passport);
                 passport = HashMap::new();
                 continue;
@@ -218,10 +218,7 @@ impl Solution {
             }
         }
 
-        if !passport.is_empty() {
-            list.push(passport);
-        }
-
+        list.push(passport);
         Box::new(Solution(list))
     }
 }
