@@ -103,63 +103,52 @@
 //! For each group, count the number of questions to which **everyone** answered "yes".
 //! **What is the sum of those counts?**
 
-use crate::Problem;
-
-pub struct Solution(Vec<(u32, u32)>);
-
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
-        let mut list = Vec::new();
-        let mut group: (u32, u32) = (0, u32::max_value());
-        for line in include_str!("day6.txt").lines() {
-            if line.is_empty() {
-                list.push(group);
-                group = (0, u32::max_value());
-                continue;
-            }
-
-            let person = line.chars()
-                .map(|c| {
-                    assert!(('a'..='z').contains(&c));
-                    c as u32 - 'a' as u32
-                })
-                .fold(0u32, |acc, i| acc | 1 << i);
-
-            group.0 |= person;
-            group.1 &= person;
+fn init() -> Vec<(u32, u32)> {
+    let mut list = Vec::new();
+    let mut group: (u32, u32) = (0, u32::max_value());
+    for line in include_str!("day6.txt").lines() {
+        if line.is_empty() {
+            list.push(group);
+            group = (0, u32::max_value());
+            continue;
         }
 
-        list.push(group);
-        Box::new(Solution(list))
+        let person = line.chars()
+            .map(|c| {
+                assert!(('a'..='z').contains(&c));
+                c as u32 - 'a' as u32
+            })
+            .fold(0u32, |acc, i| acc | 1 << i);
+
+        group.0 |= person;
+        group.1 &= person;
     }
+
+    list.push(group);
+    list
 }
 
-impl Problem for Solution {
-    fn part1(&self) -> i64 {
-        self.0
-            .iter()
-            .map(|i| i.0.count_ones())
-            .sum::<u32>()
-            as i64
-    }
-
-    fn part2(&self) -> i64 {
-        self.0
-            .iter()
-            .map(|i| i.1.count_ones())
-            .sum::<u32>()
-            as i64
-    }
+pub fn part1() -> i64 {
+    init()
+        .iter()
+        .map(|i| i.0.count_ones())
+        .sum::<u32>()
+        as i64
 }
 
+pub fn part2() -> i64 {
+    init()
+        .iter()
+        .map(|i| i.1.count_ones())
+        .sum::<u32>()
+        as i64
+}
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 6680)
+    assert_eq!(part1(), 6680)
 }
 
 #[test]
 fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 3117)
+    assert_eq!(part2(), 3117)
 }

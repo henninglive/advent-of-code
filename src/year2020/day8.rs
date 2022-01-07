@@ -125,7 +125,6 @@
 //! program terminates?**
 //!
 
-use crate::Problem;
 use bit_vec::BitVec;
 
 #[derive(Debug, Clone, Copy)]
@@ -135,31 +134,26 @@ enum Instruction {
     JMP(i16),
 }
 
-pub struct Solution(Vec<Instruction>);
-
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
-        let instructions = include_str!("day8.txt")
-            .lines()
-            .map(|s| {
-                let (opcode, param) = s.split_at(3);
-                let (sign, value_str) = param.split_at(2);
-                let value = value_str.parse::<i16>().unwrap();
-                match (opcode, sign) {
-                    ("acc", " +") => Instruction::ACC(value),
-                    ("acc", " -") => Instruction::ACC(-value),
-                    ("nop", " +") => Instruction::NOP(value),
-                    ("nop", " -") => Instruction::NOP(-value),
-                    ("jmp", " +") => Instruction::JMP(value),
-                    ("jmp", " -") => Instruction::JMP(-value),
-                    _ => panic!("invalid instruction '{}'", s),
-                }
-            })
-            .collect::<Vec<_>>();
-
-        Box::new(Solution(instructions))
-    }
+fn load() -> Vec<Instruction> {
+    include_str!("day8.txt")
+        .lines()
+        .map(|s| {
+            let (opcode, param) = s.split_at(3);
+            let (sign, value_str) = param.split_at(2);
+            let value = value_str.parse::<i16>().unwrap();
+            match (opcode, sign) {
+                ("acc", " +") => Instruction::ACC(value),
+                ("acc", " -") => Instruction::ACC(-value),
+                ("nop", " +") => Instruction::NOP(value),
+                ("nop", " -") => Instruction::NOP(-value),
+                ("jmp", " +") => Instruction::JMP(value),
+                ("jmp", " -") => Instruction::JMP(-value),
+                _ => panic!("invalid instruction '{}'", s),
+            }
+        })
+        .collect::<Vec<_>>()
 }
+
 
 fn run(instructions: &[Instruction]) -> Result<i64, i64> {
     let mut executed = BitVec::from_elem(instructions.len(), false);
@@ -189,46 +183,42 @@ fn run(instructions: &[Instruction]) -> Result<i64, i64> {
     }
 }
 
-impl Problem for Solution {
-    fn part1(&self) -> i64 {
-        run(&self.0[..]).unwrap_err()
-    }
+pub fn part1() -> i64 {
+    run(&load()[..]).unwrap_err()
+}
 
-    fn part2(&self) -> i64 {
-        let mut instructions = self.0.clone();
-        for i in 0usize..instructions.len() {
-            let ins = instructions[i];
-            match ins {
-                Instruction::JMP(value) => {
-                    instructions[i] = Instruction::NOP(value);
-                    if let Ok(i) = run(&instructions[..]) {
-                        return i;
-                    }
-                    instructions[i] = ins;
+pub fn part2() -> i64 {
+    let mut instructions = load();
+    for i in 0usize..instructions.len() {
+        let ins = instructions[i];
+        match ins {
+            Instruction::JMP(value) => {
+                instructions[i] = Instruction::NOP(value);
+                if let Ok(i) = run(&instructions[..]) {
+                    return i;
                 }
-                Instruction::NOP(value) => {
-                    instructions[i] = Instruction::JMP(value);
-                    if let Ok(i) = run(&instructions[..]) {
-                        return i;
-                    }
-                    instructions[i] = ins;
-                }
-                _ => {}
+                instructions[i] = ins;
             }
+            Instruction::NOP(value) => {
+                instructions[i] = Instruction::JMP(value);
+                if let Ok(i) = run(&instructions[..]) {
+                    return i;
+                }
+                instructions[i] = ins;
+            }
+            _ => {}
         }
-        panic!("no solution found")
     }
+    panic!("no solution found")
 }
 
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 1928)
+    assert_eq!(part1(), 1928)
 }
 
 #[test]
 fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 1319)
+    assert_eq!(part2(), 1319)
 }
 

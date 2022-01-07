@@ -88,17 +88,16 @@
 //! **What do you get if you multiply together the number of trees encountered on each of the listed
 //! slopes?**
 
-use crate::Problem;
 use bit_vec::BitVec;
 
-pub struct Solution {
+struct Map {
     width: usize,
     height: usize,
     data: BitVec,
 }
 
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
+impl Map {
+    fn load() -> Map {
         let mut width: Option<usize> = None;
 
         let data = include_str!("day3.txt")
@@ -114,11 +113,11 @@ impl Solution {
             .collect::<BitVec>();
 
         let width = width.unwrap();
-        Box::new(Solution {
+        Map {
             width,
             height: data.len() / width,
             data,
-        })
+        }
     }
 
     fn test_slope(&self, step_x: usize, step_y: usize) -> i64 {
@@ -139,27 +138,25 @@ impl Solution {
     }
 }
 
-impl super::Problem for Solution {
-    fn part1(&self) -> i64 {
-        self.test_slope(3, 1)
-    }
+pub fn part1() -> i64 {
+    let map = Map::load();
+    map.test_slope(3, 1)
+}
 
-    fn part2(&self) -> i64 {
-        [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
-            .iter()
-            .map(|(x, y)| self.test_slope(*x, *y))
-            .product()
-    }
+pub fn part2() -> i64 {
+    let map = Map::load();
+    [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
+        .iter()
+        .map(|(x, y)| map.test_slope(*x, *y))
+        .product()
 }
 
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 153)
+    assert_eq!(part1(), 153)
 }
 
 #[test]
 fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 2421944712)
+    assert_eq!(part2(), 2421944712)
 }

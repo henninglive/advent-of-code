@@ -70,10 +70,7 @@
 //! **What is the ID of your seat?**
 //!
 
-use crate::Problem;
 use bit_vec::BitVec;
-
-pub struct Solution(Vec<Seat>);
 
 struct Seat {
     row: u16,
@@ -115,46 +112,40 @@ impl Seat {
     }
 }
 
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
-        let seats = include_str!("day5.txt")
-            .lines()
-            .map(|s| Seat::parse(s))
-            .collect::<Vec<_>>();
-
-        Box::new(Solution(seats))
-    }
+fn init() -> Vec<Seat> {
+    include_str!("day5.txt")
+        .lines()
+        .map(|s| Seat::parse(s))
+        .collect::<Vec<_>>()
 }
 
-impl Problem for Solution {
-    fn part1(&self) -> i64 {
-        self.0
-            .iter()
-            .map(|s| s.id())
-            .max()
-            .unwrap()
-            as i64
-    }
+pub fn part1() -> i64 {
+    init()
+        .iter()
+        .map(|s| s.id())
+        .max()
+        .unwrap()
+        as i64
+}
 
-    fn part2(&self) -> i64 {
-        let mut grid = BitVec::from_elem(8 * 128, false);
-        self.0
-            .iter()
-            .for_each(|seat| grid.set(seat.id() as usize, true));
+pub fn part2() -> i64 {
+    let mut grid = BitVec::from_elem(8 * 128, false);
+    init()
+        .iter()
+        .for_each(|seat| grid.set(seat.id() as usize, true));
 
-        let exists = |idx: i64| {
-            if (0..8 * 128).contains(&idx) {
-                grid.get(idx as usize).unwrap()
-            } else {
-                false
-            }
-        };
+    let exists = |idx: i64| {
+        if (0..8 * 128).contains(&idx) {
+            grid.get(idx as usize).unwrap()
+        } else {
+            false
+        }
+    };
 
-        (0..8 * 128)
-            .filter(|&id| !exists(id) && exists(id + 1) && exists(id - 1))
-            .next()
-            .unwrap()
-    }
+    (0..8 * 128)
+        .filter(|&id| !exists(id) && exists(id + 1) && exists(id - 1))
+        .next()
+        .unwrap()
 }
 
 #[test]
@@ -174,12 +165,10 @@ fn test_seat_parsing() {
 
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 963)
+    assert_eq!(part1(), 963)
 }
 
 #[test]
 fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 592)
+    assert_eq!(part2(), 592)
 }

@@ -106,24 +106,18 @@
 //!
 //! **What is the encryption weakness in your XMAS-encrypted list of numbers?**
 //!
-use crate::Problem;
 use itertools::iproduct;
 
-pub struct Solution(Vec<i64>);
-
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
-        let numbers = include_str!("day9.txt").lines()
-            .map(|s| s.parse::<i64>().unwrap())
-            .collect::<Vec<_>>();
-
-        Box::new(Solution(numbers))
-    }
+fn load() -> Vec<i64> {
+    include_str!("day9.txt").lines()
+        .map(|s| s.parse::<i64>().unwrap())
+        .collect::<Vec<_>>()
 }
 
-impl Problem for Solution {
-    fn part1(&self) -> i64 {
-        self.0.windows(26).find_map(|w| {
+pub fn part1() -> i64 {
+    load()
+        .windows(26)
+        .find_map(|w| {
             let numbers = &w[0..25];
             let sum = *w.last().unwrap();
 
@@ -136,27 +130,26 @@ impl Problem for Solution {
             } else {
                 Some(sum)
             }
-        }).unwrap()
-    }
+        })
+        .unwrap()
+}
 
-    fn part2(&self) -> i64 {
-        let part1 = self.part1();
-        (2usize..).find_map(|n| {
-            self.0.windows(n)
-                .find(|w| w.iter().sum::<i64>() == part1)
-                .map(|w| w.iter().min().unwrap() + w.iter().max().unwrap())
-        }).unwrap()
-    }
+pub fn part2() -> i64 {
+    let part1 = part1();
+    let all = load();
+    (2usize..).find_map(|n| {
+        all.windows(n)
+            .find(|w| w.iter().sum::<i64>() == part1)
+            .map(|w| w.iter().min().unwrap() + w.iter().max().unwrap())
+    }).unwrap()
 }
 
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 10884537)
+    assert_eq!(part1(), 10884537)
 }
 
 #[test]
 fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 1261309)
+    assert_eq!(part2(), 1261309)
 }

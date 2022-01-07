@@ -138,10 +138,8 @@
 //! **In your batch file, how many passports are valid?**
 //!
 
-use crate::Problem;
 use std::collections::HashMap;
 
-pub struct Solution(Vec<HashMap<PassportKey, &'static str>>);
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
 enum PassportKey {
@@ -198,29 +196,27 @@ impl PassportKey {
     }
 }
 
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
-        let mut list = Vec::new();
-        let mut passport = HashMap::new();
+fn init() -> Vec<HashMap<PassportKey, &'static str>> {
+    let mut list = Vec::new();
+    let mut passport = HashMap::new();
 
-        for line in include_str!("day4.txt").lines() {
-            if line.is_empty() {
-                list.push(passport);
-                passport = HashMap::new();
-                continue;
-            }
-
-            for pair in line.split_whitespace() {
-                let mut split = pair.split(':');
-                let key = PassportKey::parse(split.next().unwrap()).unwrap();
-                let value = split.next().unwrap();
-                passport.insert(key, value);
-            }
+    for line in include_str!("day4.txt").lines() {
+        if line.is_empty() {
+            list.push(passport);
+            passport = HashMap::new();
+            continue;
         }
 
-        list.push(passport);
-        Box::new(Solution(list))
+        for pair in line.split_whitespace() {
+            let mut split = pair.split(':');
+            let key = PassportKey::parse(split.next().unwrap()).unwrap();
+            let value = split.next().unwrap();
+            passport.insert(key, value);
+        }
     }
+
+    list.push(passport);
+    list
 }
 
 fn validate_year(value: &'static str, min: u16, max: u16) -> Result<(), Box<dyn std::error::Error>> {
@@ -292,41 +288,39 @@ fn validate(key: PassportKey, value: &'static str) -> Result<(), Box<dyn std::er
     }
 }
 
-impl Problem for Solution {
-    fn part1(&self) -> i64 {
-        self.0.iter()
-            .filter(|passport| PassportKey::all()
-                .iter()
-                .filter(|k| k.required())
-                .all(|k| passport.contains_key(k))
-            )
-            .count()
-            as i64
-    }
+pub fn part1() -> i64 {
+    init()
+        .iter()
+        .filter(|passport| PassportKey::all()
+            .iter()
+            .filter(|k| k.required())
+            .all(|k| passport.contains_key(k))
+        )
+        .count()
+        as i64
+}
 
-    fn part2(&self) -> i64 {
-        self.0.iter()
-            .filter(|passport| PassportKey::all()
-                .iter()
-                .filter(|k| k.required())
-                .all(|k| passport.get(k)
-                    .map(|value| validate(*k, value).is_ok())
-                    .unwrap_or(false)
-                )
+pub fn part2() -> i64 {
+    init()
+        .iter()
+        .filter(|passport| PassportKey::all()
+            .iter()
+            .filter(|k| k.required())
+            .all(|k| passport.get(k)
+                .map(|value| validate(*k, value).is_ok())
+                .unwrap_or(false)
             )
-            .count()
-            as i64
-    }
+        )
+        .count()
+        as i64
 }
 
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 233)
+    assert_eq!(part1(), 233)
 }
 
 #[test]
 fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 111)
+    assert_eq!(part2(), 111)
 }

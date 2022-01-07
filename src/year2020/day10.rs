@@ -189,23 +189,19 @@
 //! charging outlet to your device?**
 //!
 
-use crate::Problem;
 
-pub struct Solution(Vec<i64>);
 
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
-        let mut numbers = include_str!("day10.txt").lines()
-            .map(|s| s.parse::<i64>().unwrap())
-            .collect::<Vec<_>>();
+pub fn load() -> Vec<i64> {
+    let mut numbers = include_str!("day10.txt").lines()
+        .map(|s| s.parse::<i64>().unwrap())
+        .collect::<Vec<_>>();
 
-        // Sort and add zero adapter and last adapter
-        numbers.push(0);
-        numbers.sort();
-        numbers.push(numbers.last().unwrap() + 3);
+    // Sort and add zero adapter and last adapter
+    numbers.push(0);
+    numbers.sort();
+    numbers.push(numbers.last().unwrap() + 3);
 
-        Box::new(Solution(numbers))
-    }
+    numbers
 }
 
 /// Count the number of valid permutations in a sorted subsequence of adapters where each adapter
@@ -227,59 +223,57 @@ fn count_subsequence_permutations(sequence: &[i64]) -> i64 {
     }
 }
 
-impl Problem for Solution {
-    fn part1(&self) -> i64 {
-        let counts = self.0.windows(2)
-            .map(|window| window[1] - window[0])
-            .fold([0i64, 0, 0], |mut counts, delta| {
-                counts[delta as usize - 1] += 1;
-                counts
-            });
+pub fn part1() -> i64 {
+    let counts = load()
+        .windows(2)
+        .map(|window| window[1] - window[0])
+        .fold([0i64, 0, 0], |mut counts, delta| {
+            counts[delta as usize - 1] += 1;
+            counts
+        });
 
-        counts[0] * counts[2]
-    }
+    counts[0] * counts[2]
+}
 
-    fn part2(&self) -> i64 {
-        // The key insight is that the adapters when sorted always has a 1 or 3 jolt difference
-        // in rating. A valid permutation must include both adapters if there is a 3 jolts
-        // difference between them, otherwise the difference between adapters becomes larger than 3.
-        // This allows us to split the full sequence into subsequences with a 1 jolt difference
-        // between each adapter and then count the permutations for each subsequence individually
-        // and multiply them together.
+pub fn part2() -> i64 {
+    // The key insight is that the adapters when sorted always has a 1 or 3 jolt difference
+    // in rating. A valid permutation must include both adapters if there is a 3 jolts
+    // difference between them, otherwise the difference between adapters becomes larger than 3.
+    // This allows us to split the full sequence into subsequences with a 1 jolt difference
+    // between each adapter and then count the permutations for each subsequence individually
+    // and multiply them together.
 
-        let mut n = 0;
-        let mut total_permutations = 1;
+    let mut n = 0;
+    let mut total_permutations = 1;
 
-        // loop and calculate delta until we find a 3 jolt difference.
-        for i in 1..self.0.len() {
-            match self.0[i] - self.0[i - 1] {
-                1 => continue,
-                3 => {
-                    // Calculate number of permutations from the start of current subsequence
-                    // up until the 3 jolt difference.
-                    total_permutations *= count_subsequence_permutations(&self.0[n..i]);
+    // loop and calculate delta until we find a 3 jolt difference.
+    let data = load();
+    for i in 1..data.len() {
+        match data[i] - data[i - 1] {
+            1 => continue,
+            3 => {
+                // Calculate number of permutations from the start of current subsequence
+                // up until the 3 jolt difference.
+                total_permutations *= count_subsequence_permutations(&data[n..i]);
 
-                    // Start a new subsequence after the 3 jolt difference.
-                    n = i;
-                }
-                delta => panic!("Unexpected delta {}", delta),
+                // Start a new subsequence after the 3 jolt difference.
+                n = i;
             }
+            delta => panic!("Unexpected delta {}", delta),
         }
-        total_permutations
     }
+    total_permutations
 }
 
 
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 2738)
+    assert_eq!(part1(), 2738)
 }
 
 #[test]
 fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 74049191673856)
+    assert_eq!(part2(), 74049191673856)
 }
 
 #[test]

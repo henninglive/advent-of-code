@@ -1,5 +1,3 @@
-use crate::Problem;
-
 #[derive(Debug, Clone, Copy)]
 enum Op {
     North,
@@ -18,8 +16,6 @@ enum Direction {
     South = 2,
     West = 3,
 }
-
-pub struct Solution(Vec<(Op, i16)>);
 
 struct Ship {
     x: i16,
@@ -77,41 +73,27 @@ impl Ship {
     }
 }
 
-impl Solution {
-    pub fn init() -> Box<dyn Problem> {
-        let lines = include_str!("day12.txt").lines()
-            .map(|s| {
-                let (op_str, num_str) = s.split_at(1);
-                (Op::parse(op_str).unwrap(), num_str.parse::<i16>().unwrap())
-            })
-            .collect::<Vec<_>>();
-
-        Box::new(Solution(lines))
-    }
+fn load() -> Vec<(Op, i16)> {
+    include_str!("day12.txt").lines()
+        .map(|s| {
+            let (op_str, num_str) = s.split_at(1);
+            (Op::parse(op_str).unwrap(), num_str.parse::<i16>().unwrap())
+        })
+        .collect::<Vec<_>>()
 }
 
-impl super::Problem for Solution {
-    fn part1(&self) -> i64 {
-        let mut ship = Ship::new();
-        for &(op, num) in self.0.iter() {
-            ship = ship.next(op, num);
-        }
-        ship.x.abs() as i64 + ship.y.abs() as i64
-    }
+pub fn part1() -> i64 {
+    let mut ship = Ship::new();
 
-    fn part2(&self) -> i64 {
-        0
+    let moves = load();
+    for &(op, num) in moves.iter() {
+        ship = ship.next(op, num);
     }
+    ship.x.abs() as i64 + ship.y.abs() as i64
 }
+
 
 #[test]
 fn test_part1() {
-    let solution = Solution::init();
-    assert_eq!(solution.part1(), 508)
-}
-
-#[test]
-fn test_part2() {
-    let solution = Solution::init();
-    assert_eq!(solution.part2(), 0)
+    assert_eq!(part1(), 508)
 }
