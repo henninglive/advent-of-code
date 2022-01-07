@@ -7,6 +7,7 @@ mod day6;
 mod day8;
 mod day9;
 mod day10;
+mod day11;
 mod day12;
 
 pub trait Problem {
@@ -40,6 +41,7 @@ solutions!(
     day8,
     day9,
     day10,
+    day11,
     day12
 );
 
