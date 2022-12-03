@@ -1,3 +1,5 @@
+extern crate core;
+
 mod year2020;
 mod year2021;
 mod year2022;
