@@ -21,14 +21,16 @@ fn load() -> Vec<&'static str> {
 }
 
 fn part1_find_first(s: &'static str) -> Option<i64> {
-     s.chars()
+     s
+        .chars()
         .find(|c| c.is_numeric())
         .and_then(|i| i.to_digit(10))
         .map(|i| i as i64)
 }
 
 fn part1_find_last(s: &'static str) -> Option<i64> {
-    s.chars()
+    s
+        .chars()
         .rev()
         .find(|c| c.is_numeric())
         .and_then(|i| i.to_digit(10))
@@ -104,6 +106,50 @@ pub fn part2() -> i64 {
         })
         .sum()
 }
+
+#[test]
+fn test_part1_find_first() {
+    assert_eq!(part1_find_first("test"), None);
+    assert_eq!(part1_find_first("1abc2"), Some(1));
+    assert_eq!(part1_find_first("pqr3stu8vwx"), Some(3));
+    assert_eq!(part1_find_first("a1b2c3d4e5f"), Some(1));
+    assert_eq!(part1_find_first("treb7uchet"), Some(7));
+}
+
+#[test]
+fn test_part1_find_last() {
+    assert_eq!(part1_find_last("test"), None);
+    assert_eq!(part1_find_last("1abc2"), Some(2));
+    assert_eq!(part1_find_last("pqr3stu8vwx"), Some(8));
+    assert_eq!(part1_find_last("a1b2c3d4e5f"), Some(5));
+    assert_eq!(part1_find_last("treb7uchet"), Some(7));
+}
+
+#[test]
+fn test_part2_find_first() {
+    assert_eq!(part2_find_first("test"), None);
+    assert_eq!(part2_find_first("two1nine"), Some(2));
+    assert_eq!(part2_find_first("eightwothree"), Some(8));
+    assert_eq!(part2_find_first("abcone2threexyz"), Some(1));
+    assert_eq!(part2_find_first("xtwone3four"), Some(2));
+    assert_eq!(part2_find_first("4nineeightseven2"), Some(4));
+    assert_eq!(part2_find_first("zoneight234"), Some(1));
+    assert_eq!(part2_find_first("7pqrstsixteen"), Some(7));
+}
+
+#[test]
+fn test_part2_find_last() {
+    assert_eq!(part2_find_last("test"), None);
+    assert_eq!(part2_find_last("two1nine"), Some(9));
+    assert_eq!(part2_find_last("eightwothree"), Some(3));
+    assert_eq!(part2_find_last("abcone2threexyz"), Some(3));
+    assert_eq!(part2_find_last("xtwone3four"), Some(4));
+    assert_eq!(part2_find_last("4nineeightseven2"), Some(2));
+    assert_eq!(part2_find_last("zoneight234"), Some(4));
+    assert_eq!(part2_find_last("7pqrstsixteen"), Some(6));
+}
+
+
 
 #[test]
 fn test_part1() {
