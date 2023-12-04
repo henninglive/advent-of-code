@@ -1,0 +1,28 @@
+mod day1;
+
+pub static SOLUTIONS: super::Year = [
+    (Some(day1::part1), Some(day1::part2)),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+    (None, None),
+];
