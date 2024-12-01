@@ -5,5 +5,5 @@ variety of skill sets and skill levels that can be solved in any programming lan
 
 # This Repository
 
-This program contains solutions to the Advent of Code 2020 puzzles, solved using
+This program contains solutions to the Advent of Code puzzles, solved using
 the [Rust programing language](https://www.rust-lang.org/en-US/).
