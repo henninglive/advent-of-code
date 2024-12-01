@@ -37,12 +37,33 @@ pub fn part1() -> i64 {
 }
 
 pub fn part2() -> i64 {
-    0
+    let (time, distance) = load();
+
+    let time = time
+        .into_iter()
+        .map(|i| i.to_string())
+        .collect::<String>()
+        .parse::<i64>()
+        .unwrap();
+
+    let distance = distance
+        .into_iter()
+        .map(|i| i.to_string())
+        .collect::<String>()
+        .parse::<i64>()
+        .unwrap();
+
+    count_winning_races(time, distance)
 }
 
 #[test]
 fn test_part1() {
     assert_eq!(part1(), 32076);
+}
+
+#[test]
+fn test_part2() {
+    assert_eq!(part2(), 34278221);
 }
 
 #[test]
