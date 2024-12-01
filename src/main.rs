@@ -2,17 +2,19 @@ mod year2020;
 mod year2021;
 mod year2022;
 mod year2023;
+mod year2024;
 
 use clap::Parser;
 
 type Solution = (Option<fn() -> i64>, Option<fn() -> i64>);
 type Year = [Solution; 24];
 
-static YEARS: [(u16, &'static Year); 4] = [
+static YEARS: [(u16, &'static Year); 5] = [
     (2020, &year2020::SOLUTIONS),
     (2021, &year2021::SOLUTIONS),
     (2022, &year2022::SOLUTIONS),
     (2023, &year2023::SOLUTIONS),
+    (2024, &year2024::SOLUTIONS),
 ];
 
 #[derive(Parser, Debug)]
