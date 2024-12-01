@@ -109,7 +109,8 @@
 use itertools::iproduct;
 
 fn load() -> Vec<i64> {
-    include_str!("day9.txt").lines()
+    include_str!("day9.txt")
+        .lines()
         .map(|s| s.parse::<i64>().unwrap())
         .collect::<Vec<_>>()
 }
@@ -137,11 +138,13 @@ pub fn part1() -> i64 {
 pub fn part2() -> i64 {
     let part1 = part1();
     let all = load();
-    (2usize..).find_map(|n| {
-        all.windows(n)
-            .find(|w| w.iter().sum::<i64>() == part1)
-            .map(|w| w.iter().min().unwrap() + w.iter().max().unwrap())
-    }).unwrap()
+    (2usize..)
+        .find_map(|n| {
+            all.windows(n)
+                .find(|w| w.iter().sum::<i64>() == part1)
+                .map(|w| w.iter().min().unwrap() + w.iter().max().unwrap())
+        })
+        .unwrap()
 }
 
 #[test]

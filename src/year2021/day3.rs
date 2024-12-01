@@ -11,7 +11,8 @@ fn parse(s: &str) -> u32 {
 }
 
 fn load() -> Vec<u32> {
-    include_str!("day3.txt").lines()
+    include_str!("day3.txt")
+        .lines()
         .map(|s| parse(s))
         .collect::<Vec<_>>()
 }
@@ -25,19 +26,26 @@ fn count_number_of_set_bits(numbers: &[u32], bit_idx: usize) -> usize {
     count
 }
 
-
 pub fn part1() -> i64 {
     let numbers = load();
 
     let gamma = (0usize..12)
-        .map(|i| (i, count_number_of_set_bits(&numbers, i) >= numbers.len() / 2))
-        .fold(0u32, |acc, (i, bit)| acc | ((bit as u32) << i))
-        as i64;
+        .map(|i| {
+            (
+                i,
+                count_number_of_set_bits(&numbers, i) >= numbers.len() / 2,
+            )
+        })
+        .fold(0u32, |acc, (i, bit)| acc | ((bit as u32) << i)) as i64;
 
     let epsilon = (0usize..12)
-        .map(|i| (i, count_number_of_set_bits(&numbers, i) <= numbers.len() / 2))
-        .fold(0u32, |acc, (i, bit)| acc | ((bit as u32) << i))
-        as i64;
+        .map(|i| {
+            (
+                i,
+                count_number_of_set_bits(&numbers, i) <= numbers.len() / 2,
+            )
+        })
+        .fold(0u32, |acc, (i, bit)| acc | ((bit as u32) << i)) as i64;
 
     gamma * epsilon
 }
@@ -51,11 +59,7 @@ fn test_parse() {
     assert_eq!(parse("100100111101"), 2365);
 }
 
-
 #[test]
 fn test_part1() {
     assert_eq!(part1(), 3009600);
 }
-
-
-

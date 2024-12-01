@@ -189,10 +189,9 @@
 //! charging outlet to your device?**
 //!
 
-
-
 pub fn load() -> Vec<i64> {
-    let mut numbers = include_str!("day10.txt").lines()
+    let mut numbers = include_str!("day10.txt")
+        .lines()
         .map(|s| s.parse::<i64>().unwrap())
         .collect::<Vec<_>>();
 
@@ -224,13 +223,13 @@ fn count_subsequence_permutations(sequence: &[i64]) -> i64 {
 }
 
 pub fn part1() -> i64 {
-    let counts = load()
-        .windows(2)
-        .map(|window| window[1] - window[0])
-        .fold([0i64, 0, 0], |mut counts, delta| {
+    let counts = load().windows(2).map(|window| window[1] - window[0]).fold(
+        [0i64, 0, 0],
+        |mut counts, delta| {
             counts[delta as usize - 1] += 1;
             counts
-        });
+        },
+    );
 
     counts[0] * counts[2]
 }
@@ -264,7 +263,6 @@ pub fn part2() -> i64 {
     }
     total_permutations
 }
-
 
 #[test]
 fn test_part1() {

@@ -51,7 +51,8 @@
 use itertools::iproduct;
 
 fn load() -> Vec<u16> {
-    include_str!("day1.txt").lines()
+    include_str!("day1.txt")
+        .lines()
         .map(|s| s.parse::<u16>().unwrap())
         .collect::<Vec<_>>()
 }

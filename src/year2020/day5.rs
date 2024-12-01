@@ -120,12 +120,7 @@ fn init() -> Vec<Seat> {
 }
 
 pub fn part1() -> i64 {
-    init()
-        .iter()
-        .map(|s| s.id())
-        .max()
-        .unwrap()
-        as i64
+    init().iter().map(|s| s.id()).max().unwrap() as i64
 }
 
 pub fn part2() -> i64 {

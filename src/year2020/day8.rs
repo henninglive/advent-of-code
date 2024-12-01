@@ -154,7 +154,6 @@ fn load() -> Vec<Instruction> {
         .collect::<Vec<_>>()
 }
 
-
 fn run(instructions: &[Instruction]) -> Result<i64, i64> {
     let mut executed = BitVec::from_elem(instructions.len(), false);
     let mut acc = 0i64;
@@ -221,4 +220,3 @@ fn test_part1() {
 fn test_part2() {
     assert_eq!(part2(), 1319)
 }
-

@@ -1,10 +1,8 @@
-use std::ops::RangeInclusive;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
+use std::ops::RangeInclusive;
 
-
-static NUMERIC_ASCII_RANGE: RangeInclusive<u8> = b'0' ..= b'9';
-
+static NUMERIC_ASCII_RANGE: RangeInclusive<u8> = b'0'..=b'9';
 
 fn load() -> Vec<&'static [u8]> {
     include_str!("day3.txt")
@@ -13,12 +11,11 @@ fn load() -> Vec<&'static [u8]> {
         .collect()
 }
 
-
 #[derive(Debug)]
 struct Number {
     value: i64,
     start: usize,
-    end: usize
+    end: usize,
 }
 
 #[derive(Debug)]
@@ -27,17 +24,13 @@ struct Parser<'a> {
     pos: usize,
 }
 
-impl <'a> Parser<'a> {
+impl<'a> Parser<'a> {
     fn new(data: &'a [u8]) -> Parser<'a> {
-        Parser {
-            data,
-            pos: 0
-        }
+        Parser { data, pos: 0 }
     }
 }
 
-
-impl <'a> std::iter::Iterator for Parser<'a >{
+impl<'a> std::iter::Iterator for Parser<'a> {
     type Item = Number;
 
     fn next(&mut self) -> Option<Number> {
@@ -49,7 +42,7 @@ impl <'a> std::iter::Iterator for Parser<'a >{
             return None;
         }
 
-        let start = self.pos; 
+        let start = self.pos;
         while self.pos < self.data.len() && NUMERIC_ASCII_RANGE.contains(&self.data[self.pos]) {
             self.pos += 1;
         }
@@ -60,46 +53,44 @@ impl <'a> std::iter::Iterator for Parser<'a >{
         let data = &self.data[start..end];
         let data_str = std::str::from_utf8(data).unwrap();
         let value = data_str.parse::<i64>().unwrap();
-        
 
-        Some(Number {
-            value,
-            start,
-            end
-        })
+        Some(Number { value, start, end })
     }
 }
 
 #[derive(Debug, Eq)]
 struct SymbolPointer<'a>(&'a u8);
 
-
-impl <'a> PartialEq<SymbolPointer<'a>> for SymbolPointer<'a> {
+impl<'a> PartialEq<SymbolPointer<'a>> for SymbolPointer<'a> {
     fn eq(&self, other: &SymbolPointer<'a>) -> bool {
         std::ptr::eq(self.0, other.0)
     }
 }
 
-impl <'a> Hash for SymbolPointer<'a> {
+impl<'a> Hash for SymbolPointer<'a> {
     fn hash<H: Hasher>(&self, state: &mut H) {
         state.write_usize(self.0 as *const u8 as usize)
     }
 }
 
-
 fn is_symbol(b: u8) -> bool {
     if b == b'.' {
-        return false
+        return false;
     }
 
-   if NUMERIC_ASCII_RANGE.contains(&b) {
+    if NUMERIC_ASCII_RANGE.contains(&b) {
         return false;
-   }
+    }
 
-   true
+    true
 }
 
-fn find_neighboring_symbols<'a>(num: &Number, center: &'a [u8], top: Option<&'a [u8]>, bottom: Option<&'a [u8]>) -> Vec<&'a u8> {
+fn find_neighboring_symbols<'a>(
+    num: &Number,
+    center: &'a [u8],
+    top: Option<&'a [u8]>,
+    bottom: Option<&'a [u8]>,
+) -> Vec<&'a u8> {
     if let Some(top) = top {
         assert_eq!(center.len(), top.len());
     }
@@ -122,8 +113,12 @@ fn find_neighboring_symbols<'a>(num: &Number, center: &'a [u8], top: Option<&'a 
 
     // check if there is a symbol to the over
     if let Some(top) = top {
-        let start = if num.start == 0 {0} else {num.start - 1};
-        let end = if num.end == top.len() {num.end} else {num.end + 1};
+        let start = if num.start == 0 { 0 } else { num.start - 1 };
+        let end = if num.end == top.len() {
+            num.end
+        } else {
+            num.end + 1
+        };
         for b in &top[start..end] {
             if is_symbol(*b) {
                 symbols.push(b);
@@ -133,8 +128,12 @@ fn find_neighboring_symbols<'a>(num: &Number, center: &'a [u8], top: Option<&'a 
 
     // check if there is a symbol to the under
     if let Some(bottom) = bottom {
-        let start = if num.start == 0 {0} else {num.start - 1};
-        let end = if num.end == bottom.len() {num.end} else {num.end + 1};
+        let start = if num.start == 0 { 0 } else { num.start - 1 };
+        let end = if num.end == bottom.len() {
+            num.end
+        } else {
+            num.end + 1
+        };
         for b in &bottom[start..end] {
             if is_symbol(*b) {
                 symbols.push(b);
@@ -145,7 +144,6 @@ fn find_neighboring_symbols<'a>(num: &Number, center: &'a [u8], top: Option<&'a 
     symbols
 }
 
-
 pub fn part1() -> i64 {
     let lines = load();
 
@@ -153,8 +151,12 @@ pub fn part1() -> i64 {
 
     for i in 0..lines.len() {
         let center = lines[i];
-        let over = if i == 0 {None} else {Some(lines[i - 1])};
-        let under = if i == lines.len() - 1 {None} else {Some(lines[i + 1])};
+        let over = if i == 0 { None } else { Some(lines[i - 1]) };
+        let under = if i == lines.len() - 1 {
+            None
+        } else {
+            Some(lines[i + 1])
+        };
         let numbers = Parser::new(center).collect::<Vec<_>>();
         for n in numbers {
             if !find_neighboring_symbols(&n, center, over, under).is_empty() {
@@ -163,19 +165,22 @@ pub fn part1() -> i64 {
         }
     }
 
-
     sum
 }
 
 pub fn part2() -> i64 {
     let lines = load();
 
-    let mut symbol_groups: HashMap<SymbolPointer<>, Vec<i64>> = HashMap::new();
+    let mut symbol_groups: HashMap<SymbolPointer, Vec<i64>> = HashMap::new();
 
     for i in 0..lines.len() {
         let center = lines[i];
-        let over = if i == 0 {None} else {Some(lines[i - 1])};
-        let under = if i == lines.len() - 1 {None} else {Some(lines[i + 1])};
+        let over = if i == 0 { None } else { Some(lines[i - 1]) };
+        let under = if i == lines.len() - 1 {
+            None
+        } else {
+            Some(lines[i + 1])
+        };
         let numbers = Parser::new(center).collect::<Vec<_>>();
 
         for n in numbers {
@@ -202,7 +207,6 @@ pub fn part2() -> i64 {
         .sum()
 }
 
-
 #[test]
 fn test_parser() {
     let result = Parser::new("467..114..".as_bytes()).collect::<Vec<_>>();
@@ -217,10 +221,9 @@ fn test_parser() {
     assert_eq!(result[1].value, 114);
 }
 
-
 #[test]
 fn test_has_no_symbol() {
-    let over  = None;
+    let over = None;
     let center = "..592.....".as_bytes();
     let under = None;
     let numbers = Parser::new(center).collect::<Vec<_>>();
@@ -232,7 +235,7 @@ fn test_has_no_symbol() {
 
 #[test]
 fn test_has_symbol_right() {
-    let over  = None;
+    let over = None;
     let center = "617*......".as_bytes();
     let under = None;
     let numbers = Parser::new(center).collect::<Vec<_>>();
@@ -245,7 +248,7 @@ fn test_has_symbol_right() {
 
 #[test]
 fn test_has_symbol_left() {
-    let over  = None;
+    let over = None;
     let center = "....*617......".as_bytes();
     let under = None;
     let numbers = Parser::new(center).collect::<Vec<_>>();
@@ -257,8 +260,7 @@ fn test_has_symbol_left() {
 
 #[test]
 fn test_has_symbol_over() {
-
-    let over  = Some(".....*....".as_bytes());
+    let over = Some(".....*....".as_bytes());
     let center = ".664.598..".as_bytes();
     let under = None;
     let numbers = Parser::new(center).collect::<Vec<_>>();
@@ -274,7 +276,7 @@ fn test_has_symbol_over() {
 
 #[test]
 fn test_has_symbol_under() {
-    let over  = None;
+    let over = None;
     let center = "467..114..".as_bytes();
     let under = Some("...*......".as_bytes());
     let numbers = Parser::new(center).collect::<Vec<_>>();
@@ -288,8 +290,6 @@ fn test_has_symbol_under() {
     assert_eq!(symbols_1.len(), 0);
 }
 
-
-
 #[test]
 fn test_part1() {
     assert_eq!(part1(), 551094);
@@ -299,4 +299,3 @@ fn test_part1() {
 fn test_part2() {
     assert_eq!(part2(), 80179647);
 }
-

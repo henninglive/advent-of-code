@@ -3,7 +3,7 @@ fn score_part1(opponent_hand: char, my_hand: char) -> i64 {
         'X' => 1,
         'Y' => 2,
         'Z' => 3,
-        _ => panic!("Unexpected hand '{}'", my_hand)
+        _ => panic!("Unexpected hand '{}'", my_hand),
     };
     let score_winner = match (my_hand, opponent_hand) {
         ('X', 'A') => 3,
@@ -15,7 +15,7 @@ fn score_part1(opponent_hand: char, my_hand: char) -> i64 {
         ('X', 'C') => 6,
         ('Y', 'A') => 6,
         ('Z', 'B') => 6,
-        _ => panic!("Unexpected hands '{}' '{}'", my_hand, opponent_hand)
+        _ => panic!("Unexpected hands '{}' '{}'", my_hand, opponent_hand),
     };
     score_hand + score_winner
 }
@@ -31,20 +31,20 @@ fn score_part2(opponent_hand: char, outcome: char) -> i64 {
         ('A', 'Z') => 'Y',
         ('B', 'Z') => 'Z',
         ('C', 'Z') => 'X',
-        _ => panic!("Unexpected hand or outcome '{}' '{}'", opponent_hand, outcome)
+        _ => panic!(
+            "Unexpected hand or outcome '{}' '{}'",
+            opponent_hand, outcome
+        ),
     };
 
     score_part1(opponent_hand, my_hand)
 }
 
-
 fn load() -> Vec<(char, char)> {
     let mut res = Vec::new();
 
     for line in include_str!("day2.txt").lines() {
-        let mut hand_iter = line
-            .split_whitespace()
-            .flat_map(|c| c.chars());
+        let mut hand_iter = line.split_whitespace().flat_map(|c| c.chars());
 
         let a = hand_iter.next().unwrap();
         let b = hand_iter.next().unwrap();

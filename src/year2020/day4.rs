@@ -140,7 +140,6 @@
 
 use std::collections::HashMap;
 
-
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
 enum PassportKey {
     /// Birth Year
@@ -186,7 +185,7 @@ impl PassportKey {
             "ECL" => Ok(ECL),
             "PID" => Ok(PID),
             "CID" => Ok(CID),
-            _ => Err(format!("unexpected key {}", s))
+            _ => Err(format!("unexpected key {}", s)),
         }
     }
 
@@ -219,7 +218,11 @@ fn init() -> Vec<HashMap<PassportKey, &'static str>> {
     list
 }
 
-fn validate_year(value: &'static str, min: u16, max: u16) -> Result<(), Box<dyn std::error::Error>> {
+fn validate_year(
+    value: &'static str,
+    min: u16,
+    max: u16,
+) -> Result<(), Box<dyn std::error::Error>> {
     if value.len() != 4 {
         return Err(format!("Not four digit year {:?}", value).into());
     }
@@ -275,7 +278,7 @@ fn validate(key: PassportKey, value: &'static str) -> Result<(), Box<dyn std::er
             "grn" => Ok(()),
             "hzl" => Ok(()),
             "oth" => Ok(()),
-            _ => Err(format!("Invalid eye color {:?}", value).into())
+            _ => Err(format!("Invalid eye color {:?}", value).into()),
         },
         PID => {
             if value.len() == 9 && value.chars().all(|c| c.is_numeric()) {
@@ -284,35 +287,34 @@ fn validate(key: PassportKey, value: &'static str) -> Result<(), Box<dyn std::er
                 Err(format!("Invalid Passport ID {:?}", value).into())
             }
         }
-        _ => Err(format!("unknown key {:?}", key).into())
+        _ => Err(format!("unknown key {:?}", key).into()),
     }
 }
 
 pub fn part1() -> i64 {
     init()
         .iter()
-        .filter(|passport| PassportKey::all()
-            .iter()
-            .filter(|k| k.required())
-            .all(|k| passport.contains_key(k))
-        )
-        .count()
-        as i64
+        .filter(|passport| {
+            PassportKey::all()
+                .iter()
+                .filter(|k| k.required())
+                .all(|k| passport.contains_key(k))
+        })
+        .count() as i64
 }
 
 pub fn part2() -> i64 {
     init()
         .iter()
-        .filter(|passport| PassportKey::all()
-            .iter()
-            .filter(|k| k.required())
-            .all(|k| passport.get(k)
-                .map(|value| validate(*k, value).is_ok())
-                .unwrap_or(false)
-            )
-        )
-        .count()
-        as i64
+        .filter(|passport| {
+            PassportKey::all().iter().filter(|k| k.required()).all(|k| {
+                passport
+                    .get(k)
+                    .map(|value| validate(*k, value).is_ok())
+                    .unwrap_or(false)
+            })
+        })
+        .count() as i64
 }
 
 #[test]

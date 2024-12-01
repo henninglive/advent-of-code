@@ -82,13 +82,9 @@ fn init() -> Vec<Line> {
 pub fn part1() -> i64 {
     init()
         .iter()
-        .filter(|line| (line.0..=line.1).contains(
-            &line.3.chars().filter(|c| *c == line.2).count()
-        ))
-        .count()
-        as i64
+        .filter(|line| (line.0..=line.1).contains(&line.3.chars().filter(|c| *c == line.2).count()))
+        .count() as i64
 }
-
 
 pub fn part2() -> i64 {
     init()
@@ -98,8 +94,7 @@ pub fn part2() -> i64 {
             let b = line.3.chars().nth(line.1 - 1).unwrap();
             (a == line.2) ^ (b == line.2)
         })
-        .count()
-        as i64
+        .count() as i64
 }
 
 #[test]

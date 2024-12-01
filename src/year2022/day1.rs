@@ -13,7 +13,6 @@ fn load() -> Vec<Vec<i64>> {
     all
 }
 
-
 pub fn part1() -> i64 {
     load()
         .into_iter()

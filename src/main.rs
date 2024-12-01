@@ -12,14 +12,14 @@ static YEARS: [(u16, &'static Year); 4] = [
     (2020, &year2020::SOLUTIONS),
     (2021, &year2021::SOLUTIONS),
     (2022, &year2022::SOLUTIONS),
-    (2023, &year2023::SOLUTIONS)
+    (2023, &year2023::SOLUTIONS),
 ];
 
 #[derive(Parser, Debug)]
 #[command(author, version)]
 #[command(about = "Solutions Advent of Code code challenges: https://adventofcode.com")]
-#[command(long_about =
-"Solutions Advent of Code code challenges: https://adventofcode.com
+#[command(
+    long_about = "Solutions Advent of Code code challenges: https://adventofcode.com
 
 Advent of Code https://adventofcode.com is a website with Advent Calendars
 with small programming puzzles for a variety of skill sets and skill levels that
@@ -53,7 +53,7 @@ fn main() {
 
             std::slice::from_ref(year_solutions)
         }
-        None => &YEARS[..]
+        None => &YEARS[..],
     };
 
     for year in years {
@@ -64,22 +64,27 @@ fn main() {
                 let day_solutions = &year.1[(day - 1) as usize];
                 vec![(day, day_solutions)]
             }
-            None => year.1
+            None => year
+                .1
                 .iter()
                 .enumerate()
                 .map(|(day_idx, solution)| ((day_idx + 1) as u16, solution))
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>(),
         };
 
         for (day, solution) in days {
             let solve = |of: Option<fn() -> i64>| -> String {
-                of.map(|f| f().to_string()).unwrap_or_else(|| "unsolved".to_string())
+                of.map(|f| f().to_string())
+                    .unwrap_or_else(|| "unsolved".to_string())
             };
 
             let part1 = solve(solution.0);
             let part2 = solve(solution.1);
 
-            println!("\tDay: {:2}, part1: {:>10}, part2: {:>10}", day, part1, part2)
+            println!(
+                "\tDay: {:2}, part1: {:>10}, part2: {:>10}",
+                day, part1, part2
+            )
         }
     }
 }

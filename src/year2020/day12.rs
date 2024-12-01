@@ -33,7 +33,7 @@ impl Op {
             "L" => Ok(Op::Left),
             "R" => Ok(Op::Right),
             "F" => Ok(Op::Forward),
-            _ => Err(format!("unexpected op {}", s))
+            _ => Err(format!("unexpected op {}", s)),
         }
     }
 }
@@ -63,18 +63,37 @@ impl Ship {
 
     fn next(self, op: Op, num: i16) -> Ship {
         match (op, self.d) {
-            (Op::North, _) | (Op::Forward, Direction::North) => Ship { y: self.y - num, ..self },
-            (Op::East, _) | (Op::Forward, Direction::East) => Ship { x: self.x + num, ..self },
-            (Op::South, _) | (Op::Forward, Direction::South) => Ship { y: self.y + num, ..self },
-            (Op::West, _) | (Op::Forward, Direction::West) => Ship { x: self.x - num, ..self },
-            (Op::Left, _) => Ship { d: self.d.translate(-num), ..self },
-            (Op::Right, _) => Ship { d: self.d.translate(num), ..self },
+            (Op::North, _) | (Op::Forward, Direction::North) => Ship {
+                y: self.y - num,
+                ..self
+            },
+            (Op::East, _) | (Op::Forward, Direction::East) => Ship {
+                x: self.x + num,
+                ..self
+            },
+            (Op::South, _) | (Op::Forward, Direction::South) => Ship {
+                y: self.y + num,
+                ..self
+            },
+            (Op::West, _) | (Op::Forward, Direction::West) => Ship {
+                x: self.x - num,
+                ..self
+            },
+            (Op::Left, _) => Ship {
+                d: self.d.translate(-num),
+                ..self
+            },
+            (Op::Right, _) => Ship {
+                d: self.d.translate(num),
+                ..self
+            },
         }
     }
 }
 
 fn load() -> Vec<(Op, i16)> {
-    include_str!("day12.txt").lines()
+    include_str!("day12.txt")
+        .lines()
         .map(|s| {
             let (op_str, num_str) = s.split_at(1);
             (Op::parse(op_str).unwrap(), num_str.parse::<i16>().unwrap())
@@ -91,7 +110,6 @@ pub fn part1() -> i64 {
     }
     ship.x.abs() as i64 + ship.y.abs() as i64
 }
-
 
 #[test]
 fn test_part1() {

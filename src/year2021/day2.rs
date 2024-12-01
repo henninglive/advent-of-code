@@ -11,7 +11,7 @@ fn parse(s: &str) -> (Action, i64) {
         Some("up") => Action::UP,
         Some("down") => Action::DOWN,
         Some(s) => panic!("unknown action '{}'", s),
-        None => panic!("No action")
+        None => panic!("No action"),
     };
 
     let arg = split.next().unwrap().parse::<i64>().unwrap();
@@ -20,7 +20,8 @@ fn parse(s: &str) -> (Action, i64) {
 }
 
 fn load() -> Vec<(Action, i64)> {
-    include_str!("day2.txt").lines()
+    include_str!("day2.txt")
+        .lines()
         .map(|s| parse(s))
         .collect::<Vec<_>>()
 }
@@ -47,7 +48,7 @@ pub fn part2() -> i64 {
             Action::FORWARD => {
                 x += arg;
                 y += aim * arg;
-            },
+            }
             Action::UP => aim -= arg,
             Action::DOWN => aim += arg,
         }
@@ -64,5 +65,3 @@ fn test_part1() {
 fn test_part2() {
     assert_eq!(part2(), 1749524700);
 }
-
-

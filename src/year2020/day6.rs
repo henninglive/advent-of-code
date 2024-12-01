@@ -113,7 +113,8 @@ fn init() -> Vec<(u32, u32)> {
             continue;
         }
 
-        let person = line.chars()
+        let person = line
+            .chars()
             .map(|c| {
                 assert!(('a'..='z').contains(&c));
                 c as u32 - 'a' as u32
@@ -129,19 +130,11 @@ fn init() -> Vec<(u32, u32)> {
 }
 
 pub fn part1() -> i64 {
-    init()
-        .iter()
-        .map(|i| i.0.count_ones())
-        .sum::<u32>()
-        as i64
+    init().iter().map(|i| i.0.count_ones()).sum::<u32>() as i64
 }
 
 pub fn part2() -> i64 {
-    init()
-        .iter()
-        .map(|i| i.1.count_ones())
-        .sum::<u32>()
-        as i64
+    init().iter().map(|i| i.1.count_ones()).sum::<u32>() as i64
 }
 #[test]
 fn test_part1() {

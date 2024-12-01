@@ -9,19 +9,20 @@ struct Card {
     my_numbers: HashSet<u8>,
 }
 
-
 fn parse_line(line: &str) -> Card {
     let mut main_parts = line.split(":");
     let prefix_part = main_parts.next().unwrap();
     let numbers_part = main_parts.next().unwrap();
 
-    let prefix = prefix_part.trim_start_matches("Card").trim_start_matches(' ');
+    let prefix = prefix_part
+        .trim_start_matches("Card")
+        .trim_start_matches(' ');
     let id = prefix.parse::<i16>().unwrap();
 
     let mut numbers_parts = numbers_part.split("|");
     let winning_numbers_part = numbers_parts.next().unwrap();
     let my_numbers_part = numbers_parts.next().unwrap();
-    
+
     let winning_numbers = winning_numbers_part
         .split_whitespace()
         .into_iter()
@@ -39,10 +40,9 @@ fn parse_line(line: &str) -> Card {
     Card {
         id,
         winning_numbers,
-        my_numbers
+        my_numbers,
     }
 }
-
 
 fn solve_part1(card_data: &'static str) -> i64 {
     card_data
@@ -64,10 +64,7 @@ pub fn part1() -> i64 {
 }
 
 fn solve_part2(card_data: &'static str) -> i64 {
-    let cards = card_data
-        .lines()
-        .map(|l| parse_line(l))
-        .collect::<Vec<_>>();
+    let cards = card_data.lines().map(|l| parse_line(l)).collect::<Vec<_>>();
 
     let mut counts = vec![1i64; cards.len()];
 
@@ -87,7 +84,6 @@ fn solve_part2(card_data: &'static str) -> i64 {
     counts.into_iter().sum()
 }
 
-
 pub fn part2() -> i64 {
     solve_part2(CARD_DATA)
 }
@@ -96,8 +92,7 @@ pub fn part2() -> i64 {
 mod test {
     use super::*;
 
-    static TEST_CARDS: &'static str = 
-    "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53\n\
+    static TEST_CARDS: &'static str = "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53\n\
     Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19\n\
     Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1\n\
     Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83\n\
@@ -109,35 +104,32 @@ mod test {
         let line: &str = "Card 1: 41 48 83 86 17 | 83 86  6 31 17 9 48 53";
         let card = Card {
             id: 1,
-            winning_numbers: vec![41,48,83,86,17].into_iter().collect::<HashSet<_>>(),
-            my_numbers: vec![83,86,6,31,17,9,48,53].into_iter().collect::<HashSet<_>>()
+            winning_numbers: vec![41, 48, 83, 86, 17].into_iter().collect::<HashSet<_>>(),
+            my_numbers: vec![83, 86, 6, 31, 17, 9, 48, 53]
+                .into_iter()
+                .collect::<HashSet<_>>(),
         };
-    
+
         assert_eq!(parse_line(line), card);
     }
-    
-    
+
     #[test]
     fn test_solve_part1() {
         assert_eq!(solve_part1(TEST_CARDS), 13);
     }
-    
-    
+
     #[test]
     fn test_part1() {
         assert_eq!(part1(), 23028);
     }
-    
-    
+
     #[test]
     fn test_solve_part2() {
         assert_eq!(solve_part2(TEST_CARDS), 30);
     }
-    
+
     #[test]
     fn test_part2() {
         assert_eq!(part2(), 9236992);
     }
-  
 }
-
