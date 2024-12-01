@@ -1,0 +1,5 @@
+[package]
+name = "advent-of-code-core"
+version = "0.1.0"
+authors = ["Henning Ottesen <henning@live.no>"]
+edition = "2021"

@@ -1,0 +1,10 @@
+[package]
+name = "advent-of-code-2024"
+version = "0.1.0"
+authors = ["Henning Ottesen <henning@live.no>"]
+edition = "2021"
+default-run = "advent-of-code-2024"
+
+
+[dependencies]
+advent-of-code-core = { path = "../core" }

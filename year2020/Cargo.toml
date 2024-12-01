@@ -1,0 +1,10 @@
+[package]
+name = "advent-of-code-2020"
+version = "0.1.0"
+authors = ["Henning Ottesen <henning@live.no>"]
+edition = "2021"
+
+[dependencies]
+itertools = "0.13"
+bit-vec = "0.8"
+advent-of-code-core = { path = "../core" }
