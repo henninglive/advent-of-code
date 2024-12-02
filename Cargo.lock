@@ -30,6 +30,7 @@ name = "advent-of-code-2023"
 version = "0.1.0"
 dependencies = [
  "advent-of-code-core",
+ "more-asserts",
 ]
 
 [[package]]
@@ -108,3 +109,9 @@ name = "regex-syntax"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
+
+[[package]]
+name = "more-asserts"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fafa6961cabd9c63bcd77a45d7e3b7f3b552b70417831fb0f56db717e72407e"
