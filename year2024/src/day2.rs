@@ -15,12 +15,10 @@ fn is_safe(levels: &[i16]) -> bool {
         || levels.windows(2).all(|w| (1..=3).contains(&(w[0] - w[1])))
 }
 
-fn is_safe_remove(levels: &[i16]) -> bool {
+fn is_safe_remove(levels: &[i16], buffer: &mut Vec<i16>) -> bool {
     if is_safe(levels) {
         return true;
     }
-
-    let mut buffer = Vec::with_capacity(levels.len());
 
     for i in 0..levels.len() {
         buffer.clear();
@@ -47,5 +45,6 @@ pub fn part1() -> i64 {
 
 pub fn part2() -> i64 {
     let data = load();
-    data.into_iter().filter(|l| is_safe_remove(&l[..])).count() as i64
+    let mut buffer = Vec::with_capacity(10);
+    data.into_iter().filter(|l| is_safe_remove(&l[..], &mut buffer)).count() as i64
 }
