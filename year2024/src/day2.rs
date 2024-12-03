@@ -46,5 +46,7 @@ pub fn part1() -> i64 {
 pub fn part2() -> i64 {
     let data = load();
     let mut buffer = Vec::with_capacity(10);
-    data.into_iter().filter(|l| is_safe_remove(&l[..], &mut buffer)).count() as i64
+    data.into_iter()
+        .filter(|l| is_safe_remove(&l[..], &mut buffer))
+        .count() as i64
 }
