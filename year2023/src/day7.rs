@@ -325,114 +325,56 @@ mod test {
     fn test_hand_ranking() {
         // Five of a Kind
 
-        assert_eq!(
-            parse_cards("AAAAA").ranking(),
-            HandRanking::FiveOfAKind
-        );
+        assert_eq!(parse_cards("AAAAA").ranking(), HandRanking::FiveOfAKind);
 
         // Four of a Kind
 
-        assert_eq!(
-            parse_cards("KKKKQ").ranking(),
-            HandRanking::FourOfAKind
-        );
+        assert_eq!(parse_cards("KKKKQ").ranking(), HandRanking::FourOfAKind);
 
-        assert_eq!(
-            parse_cards("AQQQQ").ranking(),
-            HandRanking::FourOfAKind
-        );
+        assert_eq!(parse_cards("AQQQQ").ranking(), HandRanking::FourOfAKind);
 
         // Full house
 
-        assert_eq!(
-            parse_cards("KKK66").ranking(),
-            HandRanking::FullHouse
-        );
+        assert_eq!(parse_cards("KKK66").ranking(), HandRanking::FullHouse);
 
-        assert_eq!(
-            parse_cards("KK666").ranking(),
-            HandRanking::FullHouse
-        );
+        assert_eq!(parse_cards("KK666").ranking(), HandRanking::FullHouse);
 
-        assert_eq!(
-            parse_cards("23332").ranking(),
-            HandRanking::FullHouse,
-        );
+        assert_eq!(parse_cards("23332").ranking(), HandRanking::FullHouse,);
 
         // Three of a Kind
 
-        assert_eq!(
-            parse_cards("KKKJT").ranking(),
-            HandRanking::ThreeOfAKind
-        );
+        assert_eq!(parse_cards("KKKJT").ranking(), HandRanking::ThreeOfAKind);
 
-        assert_eq!(
-            parse_cards("KJJJT").ranking(),
-            HandRanking::ThreeOfAKind
-        );
+        assert_eq!(parse_cards("KJJJT").ranking(), HandRanking::ThreeOfAKind);
 
-        assert_eq!(
-            parse_cards("KJTTT").ranking(),
-            HandRanking::ThreeOfAKind
-        );
+        assert_eq!(parse_cards("KJTTT").ranking(), HandRanking::ThreeOfAKind);
 
         // Two pair
 
-        assert_eq!(
-            parse_cards("TT996").ranking(),
-            HandRanking::TwoPair,
-        );
+        assert_eq!(parse_cards("TT996").ranking(), HandRanking::TwoPair,);
 
-        assert_eq!(
-            parse_cards("TT966").ranking(),
-            HandRanking::TwoPair
-        );
+        assert_eq!(parse_cards("TT966").ranking(), HandRanking::TwoPair);
 
-        assert_eq!(
-            parse_cards("T9966").ranking(),
-            HandRanking::TwoPair
-        );
+        assert_eq!(parse_cards("T9966").ranking(), HandRanking::TwoPair);
 
         // One Pair
 
-        assert_eq!(
-            parse_cards("88765").ranking(),
-            HandRanking::OnePair
-        );
+        assert_eq!(parse_cards("88765").ranking(), HandRanking::OnePair);
 
-        assert_eq!(
-            parse_cards("87765").ranking(),
-            HandRanking::OnePair,
-        );
+        assert_eq!(parse_cards("87765").ranking(), HandRanking::OnePair,);
 
-        assert_eq!(
-            parse_cards("87665").ranking(),
-            HandRanking::OnePair,
-        );
+        assert_eq!(parse_cards("87665").ranking(), HandRanking::OnePair,);
 
-        assert_eq!(
-            parse_cards("87655").ranking(),
-            HandRanking::OnePair
-        );
+        assert_eq!(parse_cards("87655").ranking(), HandRanking::OnePair);
 
-        assert_eq!(
-            parse_cards("87655").ranking(),
-            HandRanking::OnePair
-        );
+        assert_eq!(parse_cards("87655").ranking(), HandRanking::OnePair);
 
         // High Card
-        assert_eq!(
-            parse_cards("5432A").ranking(),
-            HandRanking::HighCard
-        );
+        assert_eq!(parse_cards("5432A").ranking(), HandRanking::HighCard);
     }
 
     #[test]
     fn test_hand_ordering() {
-        assert_gt!(
-            parse_cards("33332"),
-            parse_cards("2AAAA")
-        );
+        assert_gt!(parse_cards("33332"), parse_cards("2AAAA"));
     }
-
 }

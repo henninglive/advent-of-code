@@ -12,7 +12,7 @@ impl Board {
     fn new(data: &str) -> Board {
         let mut width: Option<usize> = None;
         let mut chars = Vec::new();
-        let mut height  = 0;
+        let mut height = 0;
         for line in data.lines() {
             let line = line.trim();
             match width {
@@ -20,9 +20,9 @@ impl Board {
                 None => width = Some(line.len()),
             }
             chars.extend(line.chars());
-            height  += 1;
+            height += 1;
         }
-    
+
         Board {
             data: chars,
             width: width.unwrap() as i64,
@@ -44,7 +44,6 @@ impl Board {
     }
 
     fn check_right(&self, x: i64, y: i64) -> bool {
-
         if !self.check(x + 1, y, 'M') {
             return false;
         }
@@ -61,7 +60,6 @@ impl Board {
     }
 
     fn check_down_right(&self, x: i64, y: i64) -> bool {
-        
         if !self.check(x + 1, y + 1, 'M') {
             return false;
         }
@@ -124,7 +122,7 @@ impl Board {
 
         true
     }
-    
+
     fn check_left_up(&self, x: i64, y: i64) -> bool {
         if !self.check(x - 1, y - 1, 'M') {
             return false;
@@ -173,17 +171,15 @@ impl Board {
         true
     }
 
-
     fn check_d1(&self, x: i64, y: i64) -> bool {
-        ( self.check(x - 1, y - 1, 'M') && self.check(x + 1, y + 1, 'S')) || 
-        ( self.check(x - 1, y - 1, 'S') && self.check(x + 1, y + 1, 'M'))
+        (self.check(x - 1, y - 1, 'M') && self.check(x + 1, y + 1, 'S'))
+            || (self.check(x - 1, y - 1, 'S') && self.check(x + 1, y + 1, 'M'))
     }
 
     fn check_d2(&self, x: i64, y: i64) -> bool {
-        ( self.check(x - 1, y + 1, 'M') && self.check(x + 1, y - 1, 'S')) || 
-        ( self.check(x - 1, y + 1, 'S') && self.check(x + 1, y - 1, 'M'))
+        (self.check(x - 1, y + 1, 'M') && self.check(x + 1, y - 1, 'S'))
+            || (self.check(x - 1, y + 1, 'S') && self.check(x + 1, y - 1, 'M'))
     }
-
 
     fn check_all_part1(&self) -> i64 {
         let mut count = 0;
@@ -240,12 +236,10 @@ impl Board {
                 if self.check_d1(x, y) && self.check_d2(x, y) {
                     count += 1;
                 }
-
             }
         }
         count
     }
-
 }
 
 pub fn part1() -> i64 {
