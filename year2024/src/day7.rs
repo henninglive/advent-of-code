@@ -117,11 +117,15 @@ fn solve(data: &str, concatenation: bool) -> i64 {
     for equation in load(data) {
         let mut iter = OperatorIterator::new(equation.1.len() - 1, concatenation);
         while let Some(operators) = iter.next() {
-            let mut numbers = equation.1.iter();
-            let first = numbers.next().unwrap();
-            let mut ops = operators.iter();
+            
+            let mut result = equation.1[0];
+            for (n, op) in equation.1[1..].iter().zip(operators.iter()) {
+                result = op.solve(result, *n);
+                if result > equation.0 {
+                    break;
+                }
+            }
 
-            let result = numbers.fold(*first, |a, b| ops.next().unwrap().solve(a, *b));
             if result == equation.0 {
                 sum += result;
                 break;
