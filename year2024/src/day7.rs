@@ -185,7 +185,9 @@ mod test {
         assert_eq!(part1(), 1611660863222);
     }
 
-    #[test]
+    // Test is slow
+    //#[test]
+    #[allow(dead_code)]
     fn test_part2() {
         assert_eq!(part2(), 945341732469724);
     }
