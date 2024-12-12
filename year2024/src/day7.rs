@@ -1,12 +1,10 @@
-
 static DATA: &'static str = include_str!("day7.txt");
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-enum Operator 
-{
+enum Operator {
     Add,
     Multiply,
-    Concatenation
+    Concatenation,
 }
 
 impl Operator {
@@ -15,7 +13,7 @@ impl Operator {
             (Operator::Add, _) => {
                 *self = Operator::Multiply;
                 false
-            },
+            }
             (Operator::Multiply, false) => {
                 *self = Operator::Add;
                 true
@@ -40,23 +38,27 @@ impl Operator {
                 let s = (b as f64).log10().floor() as i32;
                 let e = f64::powi(10.0f64, s + 1) as i64;
                 a * e + b
-            },
+            }
         }
     }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-enum OperatorIteratorStatus{
+enum OperatorIteratorStatus {
     First,
     Continue,
-    Done
+    Done,
 }
 
 struct OperatorIterator(Vec<Operator>, OperatorIteratorStatus, bool);
 
 impl OperatorIterator {
     fn new(size: usize, concatenation: bool) -> OperatorIterator {
-        OperatorIterator(vec![Operator::Add; size], OperatorIteratorStatus::First, concatenation)
+        OperatorIterator(
+            vec![Operator::Add; size],
+            OperatorIteratorStatus::First,
+            concatenation,
+        )
     }
 
     fn next(&mut self) -> Option<&[Operator]> {
@@ -76,7 +78,7 @@ impl OperatorIterator {
             if !carry {
                 break;
             }
-            
+
             if idx == 0 {
                 self.1 = OperatorIteratorStatus::Done;
                 return None;
@@ -89,26 +91,22 @@ impl OperatorIterator {
     }
 }
 
+fn load(data: &str) -> Vec<(i64, Vec<i64>)> {
+    data.lines()
+        .map(|line| {
+            let line = line.trim();
+            let mut split = line.split(':');
+            let first = split.next().unwrap().parse::<i64>().unwrap();
+            let other = split.next().unwrap();
 
+            let numbers = other
+                .split_whitespace()
+                .map(|s| s.parse::<i64>().unwrap())
+                .collect::<Vec<i64>>();
 
-fn load(data: &str) -> Vec<(i64, Vec<i64>)>{
-    data
-    .lines()
-    .map(|line| {
-
-        let line = line.trim();
-        let mut split = line.split(':');
-        let first = split.next().unwrap().parse::<i64>().unwrap();
-        let other = split.next().unwrap();
-        
-        let numbers = other
-            .split_whitespace()
-            .map(|s| s.parse::<i64>().unwrap())
-            .collect::<Vec<i64>>();
-
-        (first, numbers)
-    })
-    .collect::<Vec<(i64, Vec<i64>)>>()
+            (first, numbers)
+        })
+        .collect::<Vec<(i64, Vec<i64>)>>()
 }
 
 fn solve(data: &str, concatenation: bool) -> i64 {
@@ -117,7 +115,6 @@ fn solve(data: &str, concatenation: bool) -> i64 {
     for equation in load(data) {
         let mut iter = OperatorIterator::new(equation.1.len() - 1, concatenation);
         while let Some(operators) = iter.next() {
-            
             let mut result = equation.1[0];
             for (n, op) in equation.1[1..].iter().zip(operators.iter()) {
                 result = op.solve(result, *n);
@@ -144,7 +141,6 @@ pub fn part2() -> i64 {
     solve(&DATA, true)
 }
 
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -158,7 +154,7 @@ mod test {
         192: 17 8 14\n\
         21037: 9 7 18 13\n\
         292: 11 6 16 20";
-    
+
     #[test]
     fn test_load_example() {
         let list = load(EXAMPLE);
@@ -179,7 +175,6 @@ mod test {
         assert_eq!(solve(EXAMPLE, true), 11387);
     }
 
-
     #[test]
     fn test_part1() {
         assert_eq!(part1(), 1611660863222);
@@ -191,5 +186,4 @@ mod test {
     fn test_part2() {
         assert_eq!(part2(), 945341732469724);
     }
-
 }
