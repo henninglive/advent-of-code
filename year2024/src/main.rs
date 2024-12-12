@@ -5,6 +5,7 @@ mod day4;
 mod day5;
 mod day6;
 mod day7;
+mod day8;
 
 use advent_of_code_core::{menu, Year};
 
@@ -16,7 +17,7 @@ pub static SOLUTIONS: Year = [
     (Some(day5::part1), Some(day5::part2)),
     (Some(day6::part1), Some(day6::part2)),
     (Some(day7::part1), Some(day7::part2)),
-    (None, None),
+    (Some(day8::part1), Some(day8::part2)),
     (None, None),
     (None, None),
     (None, None),
