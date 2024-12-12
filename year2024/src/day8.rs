@@ -43,17 +43,18 @@ impl V2 {
         let mut antinode = b;
         std::iter::from_fn(move || {
 
+            let res = if antinode.0 < 0 || antinode.0 >= width {
+                None
+            } else if antinode.1 < 0 || antinode.1 >= height {
+                None
+            } else {
+                Some(antinode)
+            };
+    
             antinode.0 += dx;
             antinode.1 += dy;
 
-            if antinode.0 < 0 || antinode.0 >= width {
-                return None;
-            }
-            if antinode.1 < 0 || antinode.1 >= height {
-                return None;
-            }
-            Some(antinode)
-            
+            res
         })
     }
   
@@ -105,12 +106,12 @@ impl Map {
             
         for (_, antennas) in self.antennas.iter() {
             for (v1, v2) in PairIterator::new(&antennas[..]) {
-                for a1 in V2::antinodes(*v1, *v2, self.width, self.height).take(1) {
+                for a1 in V2::antinodes(*v1, *v2, self.width, self.height).skip(1).take(1) {
                     antinodes.insert(a1);
                 }
                 
-                for a1 in V2::antinodes(*v2, *v1, self.width, self.height).take(1) {
-                    antinodes.insert(a1);
+                for a2 in V2::antinodes(*v2, *v1, self.width, self.height).skip(1).take(1) {
+                    antinodes.insert(a2);
                 }
             }
         }
@@ -128,12 +129,12 @@ impl Map {
                     antinodes.insert(a1);
                 }
                 
-                for a1 in V2::antinodes(*v2, *v1, self.width, self.height) {
-                    antinodes.insert(a1);
+                for a2 in V2::antinodes(*v2, *v1, self.width, self.height) {
+                    antinodes.insert(a2);
                 }
             }
         }
-        
+
         antinodes
     }
     
@@ -164,7 +165,7 @@ pub fn part2() -> i64 {
 mod test {
     use super::*;
 
-    static EXAMPLE: &'static str = "............\n\
+    static EXAMPLE_1: &'static str = "............\n\
         ........0...\n\
         .....0......\n\
         .......0....\n\
@@ -177,9 +178,20 @@ mod test {
         ............\n\
         ............";
 
+    static EXAMPLE_2: &'static str = "T.........\n\
+        ...T......\n\
+        .T........\n\
+        ..........\n\
+        ..........\n\
+        ..........\n\
+        ..........\n\
+        ..........\n\
+        ..........\n\
+        ..........";
+
     #[test]
-    fn test_load_example() {
-        let map: Map = load(EXAMPLE);
+    fn test_load_example_1() {
+        let map: Map = load(EXAMPLE_1);
         assert_eq!(map.height, 12);
         assert_eq!(map.width, 12);
         assert_eq!(map.antennas.len(), 2);
@@ -219,23 +231,33 @@ mod test {
     fn test_v2_antinodes() {
         let v1= V2(8, 8);
         let v2 = V2(9, 9);
-        assert_eq!(V2::antinodes(v1, v2, 12, 12).next(), Some(V2(10, 10)));
-        assert_eq!(V2::antinodes(v2, v1, 12, 12).next(), Some(V2(7, 7)));
+        assert_eq!(V2::antinodes(v1, v2, 12, 12).collect::<Vec<_>>(), &[V2(9, 9), V2(10, 10), V2(11, 11)]);
+        assert_eq!(V2::antinodes(v2, v1, 12, 12).collect::<Vec<_>>(), &[V2(8, 8), V2(7, 7), V2(6, 6), V2(5, 5), V2(4, 4), V2(3, 3), V2(2, 2), V2(1, 1), V2(0, 0)]);
     }
 
     #[test]
-    fn test_example_part1() {
-        assert_eq!(solve_part1(EXAMPLE), 14);        
+    fn test_example_1_part1() {
+        assert_eq!(solve_part1(EXAMPLE_1), 14);        
     }
 
-    //#[test]
-    fn test_example_part2() {
-        assert_eq!(solve_part2(EXAMPLE), 34);        
+    #[test]
+    fn test_example_1_part2() {
+        assert_eq!(solve_part2(EXAMPLE_1), 34);        
+    }
+
+    #[test]
+    fn test_example_2_part2() {
+        assert_eq!(solve_part2(EXAMPLE_2), 9);        
     }
 
     #[test]
     fn test_part1() {
         assert_eq!(part1(), 285);
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2(), 944);
     }
 
 }
