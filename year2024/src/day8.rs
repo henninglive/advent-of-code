@@ -37,21 +37,19 @@ impl V2 {
     fn antinodes(a: V2, b: V2, width: i16, height: i16) -> impl Iterator<Item = V2> {
         let dx = b.0 - a.0;
         let dy = b.1 - a.1;
-
         let mut antinode = b;
         std::iter::from_fn(move || {
-            let res = if antinode.0 < 0 || antinode.0 >= width {
-                None
-            } else if antinode.1 < 0 || antinode.1 >= height {
-                None
-            } else {
-                Some(antinode)
-            };
+            if antinode.0 < 0 || antinode.0 >= width {
+                return None;
+            }
+            if antinode.1 < 0 || antinode.1 >= height {
+                return None;
+            }
 
+            let prev = antinode;
             antinode.0 += dx;
             antinode.1 += dy;
-
-            res
+            Some(prev)
         })
     }
 }
