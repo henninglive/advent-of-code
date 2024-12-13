@@ -1,5 +1,6 @@
 mod day1;
 mod day10;
+mod day11;
 mod day2;
 mod day3;
 mod day4;
@@ -22,7 +23,7 @@ pub static SOLUTIONS: Year = [
     (Some(day8::part1), Some(day8::part2)),
     (Some(day9::part1), Some(day9::part2)),
     (Some(day10::part1), Some(day10::part2)),
-    (None, None),
+    (Some(day11::part1), Some(day11::part2)),
     (None, None),
     (None, None),
     (None, None),
