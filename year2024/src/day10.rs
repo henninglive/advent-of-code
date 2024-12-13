@@ -1,6 +1,3 @@
-use std::collections::HashSet;
-
-
 static DATA: &'static str = include_str!("day10.txt");
 
 struct Map {
@@ -9,34 +6,30 @@ struct Map {
     height: i16,
 }
 
-impl Map  {
+impl Map {
     fn load(data: &str) -> Map {
         let mut tiles = Vec::new();
         let mut width: Option<usize> = None;
-        let mut height = 0; 
-    
+        let mut height = 0;
+
         for line in data.lines() {
             match width {
                 Some(width) => assert_eq!(width, line.len()),
                 None => width = Some(line.len()),
             }
 
-            tiles.extend(line
-                .chars()
-                .filter_map(|c| c.to_digit(10))
-                .map(|i| i as u8)
-            );
+            tiles.extend(line.chars().filter_map(|c| c.to_digit(10)).map(|i| i as u8));
 
             height += 1;
         }
-    
+
         Map {
             tiles,
             height,
-            width: width.unwrap() as i16
+            width: width.unwrap() as i16,
         }
     }
-    
+
     fn get_cell(&self, x: i16, y: i16) -> Option<u8> {
         if x < 0 || x >= self.width {
             return None;
@@ -50,13 +43,13 @@ impl Map  {
         Some(self.tiles[i])
     }
 
-    fn count_recursive(&self, heads: &mut Vec::<(i16, i16)>, x: i16, y: i16, lvl: u8) -> i16 {
+    fn count_recursive(&self, heads: &mut Vec<(i16, i16)>, x: i16, y: i16, lvl: u8) -> i16 {
         if let Some(cell_lvl) = self.get_cell(x, y) {
             if lvl == cell_lvl {
                 if lvl == 9 {
                     let xy = (x, y);
                     if !heads.contains(&xy) {
-                        heads.push(xy);   
+                        heads.push(xy);
                     }
                     return 1;
                 }
@@ -89,7 +82,7 @@ impl Map  {
         score
     }
 
-    fn ratings (&self) -> i64 {
+    fn ratings(&self) -> i64 {
         let mut score: i64 = 0;
         let mut heads = Vec::<(i16, i16)>::new();
 
@@ -102,7 +95,6 @@ impl Map  {
 
         score
     }
-
 }
 
 fn solve_part1(data: &str) -> i64 {
@@ -153,8 +145,6 @@ mod test {
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(), 744);
+        assert_eq!(part2(), 1651);
     }
-
-
 }

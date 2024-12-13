@@ -1,10 +1,9 @@
-
 static DATA: &'static str = include_str!("day9.txt");
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum Block {
     Used(u16),
-    Free
+    Free,
 }
 
 fn load(data: &str) -> Vec<Block> {
@@ -13,7 +12,7 @@ fn load(data: &str) -> Vec<Block> {
 
     let mut id: u16 = 0;
     let mut used = true;
-    
+
     for c in data.chars() {
         let n = c.to_digit(10).unwrap() as usize;
 
@@ -34,12 +33,11 @@ fn defragment_simple(disk: &mut Vec<Block>) {
     let mut i = 0;
     let mut j = disk.len() - 1;
     while i < j {
-
-        if let Block::Used(..) = disk[i]   {
+        if let Block::Used(..) = disk[i] {
             i += 1;
             continue;
         }
-        
+
         if disk[j] == Block::Free {
             j -= 1;
             continue;
@@ -50,17 +48,17 @@ fn defragment_simple(disk: &mut Vec<Block>) {
 }
 
 fn defragment_chunks(disk: &mut Vec<Block>) {
-
     //TODO: This is shit code.
 
     let mut j = usize::MAX;
     'main: loop {
-
-        let mut chunks = disk.chunk_by_mut(|a, b| match (a, b){
-            (Block::Used(a), Block::Used(b)) => a == b,
-            (Block::Free, Block::Free) => true,
-            _ => false
-        }).collect::<Vec<_>>(); 
+        let mut chunks = disk
+            .chunk_by_mut(|a, b| match (a, b) {
+                (Block::Used(a), Block::Used(b)) => a == b,
+                (Block::Free, Block::Free) => true,
+                _ => false,
+            })
+            .collect::<Vec<_>>();
 
         j = usize::min(j, chunks.len() - 1);
 
@@ -74,9 +72,8 @@ fn defragment_chunks(disk: &mut Vec<Block>) {
             j -= 1;
             continue 'main;
         }
-    
-        for i in 0..j {
 
+        for i in 0..j {
             let free_chunk = &mut a[i];
             if let Block::Used(..) = free_chunk[0] {
                 continue;
@@ -110,15 +107,13 @@ fn defragment_chunks(disk: &mut Vec<Block>) {
 
 fn checksum(disk: &[Block]) -> i64 {
     let mut sum = 0;
-    for (i , block) in disk.iter().enumerate() {
+    for (i, block) in disk.iter().enumerate() {
         if let Block::Used(id) = block {
             sum += i as i64 * *id as i64;
         }
-
     }
     sum
 }
-
 
 fn solve_part1(data: &str) -> i64 {
     let mut disk = load(data);
@@ -166,14 +161,7 @@ mod test {
     #[test]
     fn test_load_2() {
         let blocks = load("10101");
-        assert_eq!(
-            blocks,
-            &[
-                Block::Used(0),
-                Block::Used(1),
-                Block::Used(2),
-            ]
-        );
+        assert_eq!(blocks, &[Block::Used(0), Block::Used(1), Block::Used(2),]);
     }
 
     #[test]
@@ -182,12 +170,7 @@ mod test {
         defragment_simple(&mut blocks);
         assert_eq!(
             blocks,
-            &[
-                Block::Used(0),
-                Block::Used(1),
-                Block::Free,
-                Block::Free,
-            ]
+            &[Block::Used(0), Block::Used(1), Block::Free, Block::Free,]
         );
     }
 
